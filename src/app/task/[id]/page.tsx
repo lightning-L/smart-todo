@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import {
   createTask,
   setScheduledAt,
   setDeadlineAt,
+  deleteTask,
 } from "@/lib/task-crud";
 import { AppLayout } from "@/components/AppLayout";
 import { DateTimePickerPopover, formatDateTimeDisplay } from "@/components/DateTimePickerPopover";
@@ -22,6 +23,7 @@ import { AISplitButton } from "@/components/AISplitButton";
 export default function TaskDetailPage() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const id = params.id as string;
   const from = searchParams.get("from");
   const task = useLiveQuery(() => (id ? db.tasks.get(id) : undefined), [id]);
@@ -78,14 +80,14 @@ export default function TaskDetailPage() {
   if (task === undefined) {
     return (
       <AppLayout>
-        <div className="p-6">加载中…</div>
+        <div className="p-4 md:p-6">加载中…</div>
       </AppLayout>
     );
   }
   if (!task) {
     return (
       <AppLayout>
-        <div className="p-6">
+        <div className="p-4 md:p-6">
           <p className="text-slate-500">任务不存在</p>
           <Link href="/" className="text-cyan-600 font-medium hover:underline">返回</Link>
         </div>
@@ -105,10 +107,16 @@ export default function TaskDetailPage() {
         ? "/all"
         : "/";
 
+  const handleDelete = useCallback(async () => {
+    if (!confirm("确定要删除该任务吗？此操作不可恢复。")) return;
+    await deleteTask(task.id);
+    router.push(backHref);
+  }, [task.id, router, backHref]);
+
   return (
     <AppLayout>
-      <div className="flex flex-col gap-4 p-6">
-        <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
+      <div className="flex flex-col gap-5 p-4 md:gap-4 md:p-6">
+        <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600">
           <Link href={backHref} className="font-medium text-cyan-600 hover:underline">
             ← 返回
           </Link>
@@ -129,8 +137,8 @@ export default function TaskDetailPage() {
           </span>
         </div>
 
-        <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-center gap-2">
+        <div className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm md:p-5">
+          <div className="mb-5 flex flex-col gap-3 md:mb-4 md:flex-row md:items-center md:gap-2">
             <input
               type="text"
               value={editTitle || task.title}
@@ -141,35 +149,37 @@ export default function TaskDetailPage() {
               placeholder="任务标题"
               title="回车保存"
             />
-            <span className="text-xs font-medium uppercase tracking-wider text-slate-400">{task.type}</span>
-            {task.type === "task" && !task.parentId && !isCompleted && (
-              <span className="flex gap-1">
-                <button
-                  type="button"
-                  onClick={() => updateTask(task.id, { type: "project" })}
-                  className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100"
-                >
-                  设为项目
-                </button>
-                <button
-                  type="button"
-                  onClick={() => updateTask(task.id, { type: "habit_daily" })}
-                  className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100"
-                >
-                  设为每日习惯
-                </button>
-                <button
-                  type="button"
-                  onClick={() => updateTask(task.id, { type: "ongoing" })}
-                  className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100"
-                >
-                  设为进行中
-                </button>
-              </span>
-            )}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-medium uppercase tracking-wider text-slate-400">{task.type}</span>
+              {task.type === "task" && !task.parentId && !isCompleted && (
+                <span className="flex flex-wrap gap-1">
+                  <button
+                    type="button"
+                    onClick={() => updateTask(task.id, { type: "project" })}
+                    className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100"
+                  >
+                    设为项目
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => updateTask(task.id, { type: "habit_daily" })}
+                    className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100"
+                  >
+                    设为每日习惯
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => updateTask(task.id, { type: "ongoing" })}
+                    className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100"
+                  >
+                    设为进行中
+                  </button>
+                </span>
+              )}
+            </div>
           </div>
 
-          <div className="mb-4 flex flex-wrap items-center gap-2">
+          <div className="mb-5 flex flex-wrap items-center gap-3 md:mb-4 md:gap-2">
             <DateTimePickerPopover
               value={task.scheduledAt}
               onChange={(iso) => setScheduledAt(task.id, iso)}
@@ -222,7 +232,7 @@ export default function TaskDetailPage() {
           </div>
 
           {(task.type === "habit_daily" || task.type === "ongoing") && (
-            <div className="mt-5 border-t border-slate-200 pt-5">
+            <div className="mt-6 border-t border-slate-200 pt-5 md:mt-5">
               <span className="section-label mb-2 block border-l-2 border-cyan-500 pl-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
                 每日记录
               </span>
@@ -231,7 +241,7 @@ export default function TaskDetailPage() {
           )}
 
           {(task.type === "project" || task.parentId) && (
-            <div className="mt-5 border-t border-slate-200 pt-5">
+            <div className="mt-6 border-t border-slate-200 pt-5 md:mt-5">
               <div className="mb-3 flex items-center justify-between">
                 <span className="section-label border-l-2 border-cyan-500 pl-3 text-xs font-semibold uppercase tracking-wider text-slate-500">子任务</span>
                 {task.type === "project" && !isCompleted && !showAddChildInput && (
@@ -248,7 +258,7 @@ export default function TaskDetailPage() {
                 )}
               </div>
               {showAddChildInput && (
-                <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-cyan-200 bg-cyan-50/80 p-3 shadow-sm">
+                <div className="mb-3 flex flex-wrap items-center gap-3 rounded-xl border border-cyan-200 bg-cyan-50/80 p-3 shadow-sm">
                   <input
                     ref={newChildInputRef}
                     type="text"
@@ -283,6 +293,16 @@ export default function TaskDetailPage() {
               <ProjectTree rootId={task.id} from={from} />
             </div>
           )}
+
+          <div className="mt-6 border-t border-slate-200 pt-5">
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="text-sm text-slate-400 transition-colors hover:text-red-600"
+            >
+              删除任务
+            </button>
+          </div>
         </div>
       </div>
     </AppLayout>

@@ -13,6 +13,10 @@ interface TaskRowProps {
   showTime?: boolean;
   progress?: { completed: number; total: number };
   from?: FromPage;
+  /** 自定义勾选行为（如每日区块中「今天完成」）；未传则默认为整条任务完成 */
+  onToggle?: (task: Task) => void | Promise<void>;
+  /** 与 onToggle 搭配使用，表示勾的选中状态（如今天已记录） */
+  checked?: boolean;
 }
 
 function formatTime(iso: string): string {
@@ -24,13 +28,19 @@ function formatTime(iso: string): string {
   }
 }
 
-export function TaskRow({ task, showTime = false, progress, from }: TaskRowProps) {
+export function TaskRow({ task, showTime = false, progress, from, onToggle, checked }: TaskRowProps) {
   const isCompleted = task.status === "completed";
+  const useCustomToggle = onToggle != null;
+  const showChecked = useCustomToggle ? !!checked : isCompleted;
 
   const handleToggle = useCallback(async () => {
-    if (isCompleted) return;
-    await completeTask(task.id);
-  }, [task.id, isCompleted]);
+    if (useCustomToggle) {
+      await onToggle(task);
+    } else {
+      if (isCompleted) return;
+      await completeTask(task.id);
+    }
+  }, [task, useCustomToggle, onToggle, isCompleted]);
 
   const timeStr = task.scheduledAt ? formatTime(task.scheduledAt) : "";
 
@@ -43,10 +53,11 @@ export function TaskRow({ task, showTime = false, progress, from }: TaskRowProps
         type="button"
         onClick={handleToggle}
         className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 border-slate-300 bg-white transition-colors hover:border-cyan-500 hover:bg-cyan-50"
-        aria-label={isCompleted ? "已完成" : "完成"}
-        aria-pressed={isCompleted}
+        aria-label={showChecked ? "已完成" : "完成"}
+        aria-pressed={showChecked}
+        disabled={useCustomToggle && showChecked}
       >
-        {isCompleted && (
+        {showChecked && (
           <span className="text-cyan-600" aria-hidden>
             ✓
           </span>
@@ -60,7 +71,7 @@ export function TaskRow({ task, showTime = false, progress, from }: TaskRowProps
       <TaskTypeIcon type={task.type} />
       <Link
         href={from ? `/task/${task.id}?from=${from}` : `/task/${task.id}`}
-        className={`min-w-0 flex-1 truncate text-left font-medium hover:underline ${isCompleted ? "text-slate-500 line-through" : "text-slate-800"}`}
+        className={`min-w-0 flex-1 truncate text-left font-medium hover:underline ${showChecked ? "text-slate-500 line-through" : "text-slate-800"}`}
       >
         {task.title || "（无标题）"}
         {progress && progress.total > 0 && (

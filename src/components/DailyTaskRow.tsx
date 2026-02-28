@@ -39,13 +39,23 @@ export function DailyTaskRow({ task }: DailyTaskRowProps) {
     await completeTask(task.id);
   }, [task.id]);
 
+  const handleDoneTodayQuick = useCallback(async () => {
+    if (todayLog) return;
+    await createDailyLog(task.id, today, true);
+  }, [task.id, today, todayLog]);
+
   const alreadyLogged = !!todayLog;
 
   if (task.type === "habit_daily") {
     return (
       <div className="flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white px-3 py-2.5 shadow-sm">
         <div className="min-w-0 flex-1">
-          <TaskRow task={task} from="calendar" />
+          <TaskRow
+            task={task}
+            from="calendar"
+            onToggle={handleCheckIn}
+            checked={alreadyLogged}
+          />
         </div>
         <button
           type="button"
@@ -64,7 +74,12 @@ export function DailyTaskRow({ task }: DailyTaskRowProps) {
       <div className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
         <div className="flex items-center gap-2">
           <div className="min-w-0 flex-1">
-            <TaskRow task={task} from="calendar" />
+            <TaskRow
+              task={task}
+              from="calendar"
+              onToggle={handleDoneTodayQuick}
+              checked={alreadyLogged}
+            />
           </div>
           <button
             type="button"
