@@ -3,8 +3,7 @@
 import { useCallback } from "react";
 import Link from "next/link";
 import type { Task } from "@/lib/types";
-import { completeTask, undoCompleteTask, setScheduledAt, setDeadlineAt } from "@/lib/task-crud";
-import { DateTimePickerPopover, formatDateTimeDisplay } from "./DateTimePickerPopover";
+import { completeTask, undoCompleteTask } from "@/lib/task-crud";
 import { TaskTypeIcon } from "./TaskTypeIcon";
 
 type FromPage = "inbox" | "all";
@@ -21,15 +20,6 @@ export function InboxTaskRow({ task, from }: InboxTaskRowProps) {
     if (isCompleted) await undoCompleteTask(task.id);
     else await completeTask(task.id);
   }, [task.id, isCompleted]);
-
-  const handleScheduleChange = useCallback(
-    (iso: string | null) => setScheduledAt(task.id, iso),
-    [task.id]
-  );
-  const handleDeadlineChange = useCallback(
-    (iso: string | null) => setDeadlineAt(task.id, iso),
-    [task.id]
-  );
 
   return (
     <div className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200/80 bg-white px-3 py-2.5 shadow-sm transition-all duration-200 hover:border-slate-300/80 hover:shadow-md">
@@ -49,38 +39,6 @@ export function InboxTaskRow({ task, from }: InboxTaskRowProps) {
       >
         {task.title || "（无标题）"}
       </Link>
-      {!isCompleted && (
-        <div className="flex shrink-0 items-center gap-1">
-          <DateTimePickerPopover
-            value={task.scheduledAt}
-            onChange={handleScheduleChange}
-            label="安排到"
-            allowClear
-            trigger={
-              <button
-                type="button"
-                className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
-              >
-                {task.scheduledAt ? formatDateTimeDisplay(task.scheduledAt) : "安排…"}
-              </button>
-            }
-          />
-          <DateTimePickerPopover
-            value={task.deadlineAt}
-            onChange={handleDeadlineChange}
-            label="截止"
-            allowClear
-              trigger={
-              <button
-                type="button"
-                className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
-              >
-                {task.deadlineAt ? formatDateTimeDisplay(task.deadlineAt) : "截止…"}
-              </button>
-            }
-          />
-        </div>
-      )}
     </div>
   );
 }
