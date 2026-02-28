@@ -5,10 +5,13 @@ import Link from "next/link";
 import type { Task } from "@/lib/types";
 import { completeTask } from "@/lib/task-crud";
 
+type FromPage = "all" | "calendar" | "inbox";
+
 interface TaskRowProps {
   task: Task;
   showTime?: boolean;
   progress?: { completed: number; total: number };
+  from?: FromPage;
 }
 
 function formatTime(iso: string): string {
@@ -20,7 +23,7 @@ function formatTime(iso: string): string {
   }
 }
 
-export function TaskRow({ task, showTime = false, progress }: TaskRowProps) {
+export function TaskRow({ task, showTime = false, progress, from }: TaskRowProps) {
   const isCompleted = task.status === "completed";
 
   const handleToggle = useCallback(async () => {
@@ -54,7 +57,7 @@ export function TaskRow({ task, showTime = false, progress }: TaskRowProps) {
         </span>
       )}
       <Link
-        href={`/task/${task.id}`}
+        href={from ? `/task/${task.id}?from=${from}` : `/task/${task.id}`}
         className={`min-w-0 flex-1 truncate text-left font-medium hover:underline ${isCompleted ? "text-slate-500 line-through" : "text-slate-800"}`}
       >
         {task.title || "（无标题）"}

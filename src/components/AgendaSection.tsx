@@ -8,9 +8,10 @@ interface AgendaSectionProps {
   tasks: Task[];
   showTime?: boolean;
   progressMap?: Map<string, { completed: number; total: number }>;
+  from?: "calendar";
 }
 
-export function AgendaSection({ title, tasks, showTime = false, progressMap }: AgendaSectionProps) {
+export function AgendaSection({ title, tasks, showTime = false, progressMap, from }: AgendaSectionProps) {
   if (tasks.length === 0) return null;
 
   return (
@@ -25,6 +26,7 @@ export function AgendaSection({ title, tasks, showTime = false, progressMap }: A
               task={task}
               showTime={showTime}
               progress={task.type === "project" && !task.parentId ? progressMap?.get(task.id) : undefined}
+              from={from}
             />
           </li>
         ))}

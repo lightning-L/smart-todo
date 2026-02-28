@@ -10,9 +10,11 @@ import Link from "next/link";
 interface ProjectTreeProps {
   rootId: string;
   depth?: number;
+  /** Preserve back-navigation source (e.g. from=inbox) when opening child tasks */
+  from?: string | null;
 }
 
-export function ProjectTree({ rootId, depth = 0 }: ProjectTreeProps) {
+export function ProjectTree({ rootId, depth = 0, from }: ProjectTreeProps) {
   const children = useLiveQuery(
     () => db.tasks.where("parentId").equals(rootId).sortBy("createdAt"),
     [rootId]
@@ -46,16 +48,17 @@ export function ProjectTree({ rootId, depth = 0 }: ProjectTreeProps) {
                   ? progressMap?.get(task.id)
                   : undefined
               }
+              from={from ?? undefined}
             />
             <Link
-              href={`/task/${task.id}`}
+              href={from ? `/task/${task.id}?from=${encodeURIComponent(from)}` : `/task/${task.id}`}
               className="shrink-0 text-xs font-medium text-slate-500 transition-colors hover:text-cyan-600"
             >
               详情
             </Link>
           </div>
           {task.type === "project" && (
-            <ProjectTree rootId={task.id} depth={depth + 1} />
+            <ProjectTree rootId={task.id} depth={depth + 1} from={from} />
           )}
         </li>
       ))}

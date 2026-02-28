@@ -6,11 +6,14 @@ import type { Task } from "@/lib/types";
 import { completeTask, setScheduledAt, setDeadlineAt } from "@/lib/task-crud";
 import { DateTimePickerPopover, formatDateTimeDisplay } from "./DateTimePickerPopover";
 
+type FromPage = "inbox" | "all";
+
 interface InboxTaskRowProps {
   task: Task;
+  from?: FromPage;
 }
 
-export function InboxTaskRow({ task }: InboxTaskRowProps) {
+export function InboxTaskRow({ task, from }: InboxTaskRowProps) {
   const isCompleted = task.status === "completed";
 
   const handleComplete = useCallback(async () => {
@@ -39,7 +42,7 @@ export function InboxTaskRow({ task }: InboxTaskRowProps) {
         {isCompleted && <span className="text-cyan-600">✓</span>}
       </button>
       <Link
-        href={`/task/${task.id}`}
+        href={from ? `/task/${task.id}?from=${from}` : `/task/${task.id}`}
         className={`min-w-0 flex-1 truncate text-left font-medium hover:underline ${isCompleted ? "text-slate-500 line-through" : "text-slate-800"}`}
       >
         {task.title || "（无标题）"}

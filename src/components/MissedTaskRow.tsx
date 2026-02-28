@@ -9,6 +9,7 @@ import { DateTimePickerPopover, formatDateTimeDisplay } from "./DateTimePickerPo
 
 interface MissedTaskRowProps {
   task: Task;
+  from?: "all";
 }
 
 function formatTime(iso: string): string {
@@ -19,7 +20,7 @@ function formatTime(iso: string): string {
   }
 }
 
-export function MissedTaskRow({ task }: MissedTaskRowProps) {
+export function MissedTaskRow({ task, from }: MissedTaskRowProps) {
   const isCompleted = task.status === "completed";
 
   const doToday = useCallback(async () => {
@@ -54,7 +55,7 @@ export function MissedTaskRow({ task }: MissedTaskRowProps) {
         {task.scheduledAt ? formatTime(task.scheduledAt) : "—"}
       </span>
       <Link
-        href={`/task/${task.id}`}
+        href={from ? `/task/${task.id}?from=${from}` : `/task/${task.id}`}
         className={`min-w-0 flex-1 truncate font-medium hover:underline ${isCompleted ? "text-slate-500 line-through" : "text-slate-800"}`}
       >
         {task.title || "（无标题）"}

@@ -36,7 +36,7 @@ export function InboxList() {
     <ul className="flex flex-col gap-1">
       {tasks.map((task) => (
         <li key={task.id}>
-          <InboxTaskRow task={task} />
+          <InboxTaskRow task={task} from="inbox" />
         </li>
       ))}
     </ul>

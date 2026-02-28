@@ -63,7 +63,7 @@ export function AgendaView() {
       <h1 className="mb-6 text-xl font-semibold tracking-tight text-slate-800">
         {format(selectedDate, "M月d日 EEEE", { locale: zhCN })}
       </h1>
-      <AgendaSection title="已安排" tasks={scheduled} showTime progressMap={progressMap} />
+      <AgendaSection title="已安排" tasks={scheduled} showTime progressMap={progressMap} from="calendar" />
       {daily.length > 0 && (
         <section className="mb-6">
           <h2 className="section-label mb-2.5 border-l-2 border-cyan-500 pl-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -78,7 +78,7 @@ export function AgendaView() {
           </ul>
         </section>
       )}
-      <AgendaSection title="已完成" tasks={done} showTime progressMap={progressMap} />
+      <AgendaSection title="已完成" tasks={done} showTime progressMap={progressMap} from="calendar" />
       {scheduled.length === 0 && daily.length === 0 && done.length === 0 && (
         <p className="text-sm text-slate-500">当天暂无任务</p>
       )}

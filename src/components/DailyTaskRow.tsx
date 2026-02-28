@@ -45,7 +45,7 @@ export function DailyTaskRow({ task }: DailyTaskRowProps) {
     return (
       <div className="flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white px-3 py-2.5 shadow-sm">
         <div className="min-w-0 flex-1">
-          <TaskRow task={task} />
+          <TaskRow task={task} from="calendar" />
         </div>
         <button
           type="button"
@@ -64,7 +64,7 @@ export function DailyTaskRow({ task }: DailyTaskRowProps) {
       <div className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
         <div className="flex items-center gap-2">
           <div className="min-w-0 flex-1">
-            <TaskRow task={task} />
+            <TaskRow task={task} from="calendar" />
           </div>
           <button
             type="button"
@@ -101,5 +101,5 @@ export function DailyTaskRow({ task }: DailyTaskRowProps) {
     );
   }
 
-  return <TaskRow task={task} />;
+  return <TaskRow task={task} from="calendar" />;
 }

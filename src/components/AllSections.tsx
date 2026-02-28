@@ -80,7 +80,7 @@ export function AllSections() {
           <ul className="flex flex-col gap-1">
             {sections.missed.map((task) => (
               <li key={task.id}>
-                <MissedTaskRow task={task} />
+                <MissedTaskRow task={task} from="all" />
               </li>
             ))}
           </ul>
@@ -94,7 +94,7 @@ export function AllSections() {
           <ul className="flex flex-col gap-1">
             {sections.today.map((task) => (
               <li key={task.id}>
-                <TaskRow task={task} showTime progress={progress(task)} />
+                <TaskRow task={task} showTime progress={progress(task)} from="all" />
               </li>
             ))}
           </ul>
@@ -108,7 +108,7 @@ export function AllSections() {
           <ul className="flex flex-col gap-1">
             {sections.dueSoon.map((task) => (
               <li key={task.id}>
-                <TaskRow task={task} showTime progress={progress(task)} />
+                <TaskRow task={task} showTime progress={progress(task)} from="all" />
               </li>
             ))}
           </ul>
@@ -122,7 +122,7 @@ export function AllSections() {
           <ul className="flex flex-col gap-1">
             {sections.upcoming.map((task) => (
               <li key={task.id}>
-                <TaskRow task={task} showTime progress={progress(task)} />
+                <TaskRow task={task} showTime progress={progress(task)} from="all" />
               </li>
             ))}
           </ul>
@@ -136,7 +136,7 @@ export function AllSections() {
           <ul className="flex flex-col gap-1">
             {sections.inbox.map((task) => (
               <li key={task.id}>
-                <InboxTaskRow task={task} />
+                <InboxTaskRow task={task} from="all" />
               </li>
             ))}
           </ul>
@@ -156,7 +156,7 @@ export function AllSections() {
         <ul className="flex flex-col gap-1">
           {sections.doneToday.map((task) => (
             <li key={task.id}>
-              <TaskRow task={task} showTime progress={progress(task)} />
+              <TaskRow task={task} showTime progress={progress(task)} from="all" />
             </li>
           ))}
         </ul>
@@ -170,7 +170,7 @@ export function AllSections() {
         <ul className="flex flex-col gap-1">
           {sections.doneOlder.map((task) => (
             <li key={task.id}>
-              <TaskRow task={task} showTime progress={progress(task)} />
+              <TaskRow task={task} showTime progress={progress(task)} from="all" />
             </li>
           ))}
         </ul>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -21,7 +21,9 @@ import { AISplitButton } from "@/components/AISplitButton";
 
 export default function TaskDetailPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const id = params.id as string;
+  const from = searchParams.get("from");
   const task = useLiveQuery(() => (id ? db.tasks.get(id) : undefined), [id]);
   const parentTask = useLiveQuery(
     async () => (task?.parentId ? await db.tasks.get(task.parentId!) : undefined),
@@ -93,7 +95,15 @@ export default function TaskDetailPage() {
 
   const isCompleted = task.status === "completed";
 
-  const backHref = task.parentId ? `/task/${task.parentId}` : "/";
+  const backHref = task.parentId
+    ? from
+      ? `/task/${task.parentId}?from=${encodeURIComponent(from)}`
+      : `/task/${task.parentId}`
+    : from === "inbox"
+      ? "/inbox"
+      : from === "all"
+        ? "/all"
+        : "/";
 
   return (
     <AppLayout>
@@ -106,7 +116,7 @@ export default function TaskDetailPage() {
             <>
               <span className="text-slate-400">·</span>
               <Link
-                href={`/task/${task.parentId}`}
+                href={from ? `/task/${task.parentId}?from=${encodeURIComponent(from)}` : `/task/${task.parentId}`}
                 className="hover:text-cyan-600 hover:underline"
               >
                 {parentTask.title || "父任务"}
@@ -270,7 +280,7 @@ export default function TaskDetailPage() {
                   </button>
                 </div>
               )}
-              <ProjectTree rootId={task.id} />
+              <ProjectTree rootId={task.id} from={from} />
             </div>
           )}
         </div>
