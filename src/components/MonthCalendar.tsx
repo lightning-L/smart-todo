@@ -13,11 +13,14 @@ import {
   subMonths,
 } from "date-fns";
 import { zhCN } from "date-fns/locale";
+import { usePathname, useRouter } from "next/navigation";
 import { useUiStore } from "@/store/ui-store";
 
 const WEEKDAY_LABELS = ["日", "一", "二", "三", "四", "五", "六"];
 
 export function MonthCalendar() {
+  const router = useRouter();
+  const pathname = usePathname();
   const { selectedDate, setSelectedDate } = useUiStore();
   const monthStart = startOfMonth(selectedDate);
   const monthEnd = endOfMonth(selectedDate);
@@ -67,7 +70,10 @@ export function MonthCalendar() {
             <button
               key={d.toISOString()}
               type="button"
-              onClick={() => setSelectedDate(d)}
+              onClick={() => {
+                setSelectedDate(d);
+                if (pathname !== "/") router.push("/");
+              }}
               className={`rounded-lg py-2 text-sm font-medium transition-all duration-150 ${
                 selected
                   ? "bg-cyan-500 text-white shadow-md shadow-cyan-500/25"
