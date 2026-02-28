@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import Link from "next/link";
 import type { Task } from "@/lib/types";
 import { completeTask } from "@/lib/task-crud";
+import { TaskTypeIcon } from "./TaskTypeIcon";
 
 type FromPage = "all" | "calendar" | "inbox";
 
@@ -56,6 +57,7 @@ export function TaskRow({ task, showTime = false, progress, from }: TaskRowProps
           {timeStr || "—"}
         </span>
       )}
+      <TaskTypeIcon type={task.type} />
       <Link
         href={from ? `/task/${task.id}?from=${from}` : `/task/${task.id}`}
         className={`min-w-0 flex-1 truncate text-left font-medium hover:underline ${isCompleted ? "text-slate-500 line-through" : "text-slate-800"}`}

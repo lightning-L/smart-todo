@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Task } from "@/lib/types";
 import { completeTask, setScheduledAt, setDeadlineAt } from "@/lib/task-crud";
 import { DateTimePickerPopover, formatDateTimeDisplay } from "./DateTimePickerPopover";
+import { TaskTypeIcon } from "./TaskTypeIcon";
 
 type FromPage = "inbox" | "all";
 
@@ -41,6 +42,7 @@ export function InboxTaskRow({ task, from }: InboxTaskRowProps) {
       >
         {isCompleted && <span className="text-cyan-600">✓</span>}
       </button>
+      <TaskTypeIcon type={task.type} />
       <Link
         href={from ? `/task/${task.id}?from=${from}` : `/task/${task.id}`}
         className={`min-w-0 flex-1 truncate text-left font-medium hover:underline ${isCompleted ? "text-slate-500 line-through" : "text-slate-800"}`}

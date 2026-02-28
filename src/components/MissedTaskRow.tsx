@@ -6,6 +6,7 @@ import { startOfDay, format, parseISO } from "date-fns";
 import type { Task } from "@/lib/types";
 import { setScheduledAt, completeTask } from "@/lib/task-crud";
 import { DateTimePickerPopover, formatDateTimeDisplay } from "./DateTimePickerPopover";
+import { TaskTypeIcon } from "./TaskTypeIcon";
 
 interface MissedTaskRowProps {
   task: Task;
@@ -54,6 +55,7 @@ export function MissedTaskRow({ task, from }: MissedTaskRowProps) {
       <span className="w-14 shrink-0 text-xs tabular-nums text-slate-500">
         {task.scheduledAt ? formatTime(task.scheduledAt) : "—"}
       </span>
+      <TaskTypeIcon type={task.type} />
       <Link
         href={from ? `/task/${task.id}?from=${from}` : `/task/${task.id}`}
         className={`min-w-0 flex-1 truncate font-medium hover:underline ${isCompleted ? "text-slate-500 line-through" : "text-slate-800"}`}
