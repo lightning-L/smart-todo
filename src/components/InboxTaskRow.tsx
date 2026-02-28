@@ -42,19 +42,19 @@ export function InboxTaskRow({ task }: InboxTaskRowProps) {
   );
 
   return (
-    <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-white/5 bg-white/5 px-3 py-2 transition-[border-color,background-color] hover:border-white/10 hover:bg-white/10">
+    <div className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200/80 bg-white px-3 py-2.5 shadow-sm transition-all duration-200 hover:border-slate-300/80 hover:shadow-md">
       <button
         type="button"
         onClick={handleComplete}
-        className="flex h-5 w-5 shrink-0 items-center justify-center rounded border border-white/20 bg-transparent transition-colors hover:border-cyan-400/60 hover:bg-cyan-400/10"
+        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 border-slate-300 bg-white transition-colors hover:border-cyan-500 hover:bg-cyan-50"
         aria-label={isCompleted ? "已完成" : "完成"}
         aria-pressed={isCompleted}
       >
-        {isCompleted && <span className="text-cyan-400">✓</span>}
+        {isCompleted && <span className="text-cyan-600">✓</span>}
       </button>
       <Link
         href={`/task/${task.id}`}
-        className={`min-w-0 flex-1 truncate text-left hover:underline ${isCompleted ? "text-zinc-500 line-through" : "text-foreground"}`}
+        className={`min-w-0 flex-1 truncate text-left font-medium hover:underline ${isCompleted ? "text-slate-500 line-through" : "text-slate-800"}`}
       >
         {task.title || "（无标题）"}
       </Link>
@@ -68,7 +68,7 @@ export function InboxTaskRow({ task }: InboxTaskRowProps) {
             trigger={
               <button
                 type="button"
-                className="rounded px-2 py-1 text-xs text-zinc-400 hover:bg-white/10 hover:text-zinc-200"
+                className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
               >
                 {task.scheduledAt ? formatTime(task.scheduledAt) : "安排…"}
               </button>
@@ -79,10 +79,10 @@ export function InboxTaskRow({ task }: InboxTaskRowProps) {
             onChange={handleDeadlineChange}
             label="截止"
             allowClear
-            trigger={
+              trigger={
               <button
                 type="button"
-                className="rounded px-2 py-1 text-xs text-zinc-400 hover:bg-white/10 hover:text-zinc-200"
+                className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
               >
                 {task.deadlineAt ? formatTime(task.deadlineAt) : "截止…"}
               </button>

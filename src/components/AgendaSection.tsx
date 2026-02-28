@@ -15,7 +15,7 @@ export function AgendaSection({ title, tasks, showTime = false, progressMap }: A
 
   return (
     <section className="mb-6">
-      <h2 className="mb-2 text-xs font-medium uppercase tracking-wider text-zinc-500">
+      <h2 className="section-label mb-2.5 border-l-2 border-cyan-500 pl-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
         {title}
       </h2>
       <ul className="flex flex-col gap-1">

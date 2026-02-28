@@ -43,7 +43,7 @@ export function DailyTaskRow({ task }: DailyTaskRowProps) {
 
   if (task.type === "habit_daily") {
     return (
-      <div className="flex items-center gap-2 rounded-lg border border-white/5 bg-white/5 px-3 py-2">
+      <div className="flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white px-3 py-2.5 shadow-sm">
         <div className="min-w-0 flex-1">
           <TaskRow task={task} />
         </div>
@@ -51,7 +51,7 @@ export function DailyTaskRow({ task }: DailyTaskRowProps) {
           type="button"
           onClick={handleCheckIn}
           disabled={alreadyLogged}
-          className="shrink-0 rounded px-2 py-1 text-xs text-cyan-400 hover:bg-cyan-500/20 disabled:opacity-50"
+          className="shrink-0 rounded-lg px-2 py-1 text-xs font-medium text-cyan-600 transition-colors hover:bg-cyan-100 disabled:opacity-50"
         >
           {alreadyLogged ? "已打卡" : "打卡"}
         </button>
@@ -61,7 +61,7 @@ export function DailyTaskRow({ task }: DailyTaskRowProps) {
 
   if (task.type === "ongoing") {
     return (
-      <div className="rounded-lg border border-white/5 bg-white/5 p-3">
+      <div className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
         <div className="flex items-center gap-2">
           <div className="min-w-0 flex-1">
             <TaskRow task={task} />
@@ -69,7 +69,7 @@ export function DailyTaskRow({ task }: DailyTaskRowProps) {
           <button
             type="button"
             onClick={handleComplete}
-            className="shrink-0 rounded px-2 py-1 text-xs text-zinc-400 hover:bg-white/10"
+            className="shrink-0 rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100"
           >
             全部完成
           </button>
@@ -81,19 +81,19 @@ export function DailyTaskRow({ task }: DailyTaskRowProps) {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="今日推进备注（可选）"
-              className="min-w-0 flex-1 rounded border border-white/10 bg-transparent px-2 py-1 text-sm"
+              className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
             />
             <button
               type="button"
               onClick={handleDoneToday}
-              className="shrink-0 rounded bg-cyan-500/20 px-2 py-1 text-xs text-cyan-300 hover:bg-cyan-500/30"
+              className="shrink-0 rounded-lg bg-cyan-100 px-2.5 py-1.5 text-xs font-medium text-cyan-700 transition-colors hover:bg-cyan-200"
             >
               今日推进
             </button>
           </div>
         )}
         {alreadyLogged && (
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-slate-500">
             今日已记录{todayLog?.note ? `：${todayLog.note}` : ""}
           </p>
         )}

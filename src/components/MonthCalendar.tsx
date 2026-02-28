@@ -29,23 +29,23 @@ export function MonthCalendar() {
   }
 
   return (
-    <div className="rounded-lg border border-white/10 bg-white/5 p-3">
-      <div className="mb-2 flex items-center justify-between">
+    <div className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
+      <div className="mb-3 flex items-center justify-between">
         <button
           type="button"
           onClick={() => setSelectedDate(subMonths(selectedDate, 1))}
-          className="rounded p-1 text-zinc-400 hover:bg-white/10 hover:text-zinc-200"
+          className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
           aria-label="上一月"
         >
           ‹
         </button>
-        <span className="text-sm font-medium text-foreground">
+        <span className="text-sm font-semibold text-slate-800">
           {format(selectedDate, "yyyy年M月", { locale: zhCN })}
         </span>
         <button
           type="button"
           onClick={() => setSelectedDate(addMonths(selectedDate, 1))}
-          className="rounded p-1 text-zinc-400 hover:bg-white/10 hover:text-zinc-200"
+          className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
           aria-label="下一月"
         >
           ›
@@ -55,7 +55,7 @@ export function MonthCalendar() {
         {WEEKDAY_LABELS.map((label) => (
           <div
             key={label}
-            className="py-1 text-xs font-medium text-zinc-500"
+            className="py-1 text-[11px] font-medium uppercase tracking-wider text-slate-400"
           >
             {label}
           </div>
@@ -68,12 +68,12 @@ export function MonthCalendar() {
               key={d.toISOString()}
               type="button"
               onClick={() => setSelectedDate(d)}
-              className={`rounded py-1.5 text-sm transition-colors ${
+              className={`rounded-lg py-2 text-sm font-medium transition-all duration-150 ${
                 selected
-                  ? "bg-cyan-500/30 text-cyan-200 ring-1 ring-cyan-400/50"
+                  ? "bg-cyan-500 text-white shadow-md shadow-cyan-500/25"
                   : inMonth
-                    ? "text-foreground hover:bg-white/10"
-                    : "text-zinc-600 hover:bg-white/5"
+                    ? "text-slate-700 hover:bg-slate-100"
+                    : "text-slate-400 hover:bg-slate-50"
               }`}
             >
               {format(d, "d")}

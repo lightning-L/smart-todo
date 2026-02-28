@@ -28,10 +28,10 @@ function NavLinks({
             key={href}
             href={href}
             onClick={onNavigate}
-            className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+            className={`rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
               isActive
-                ? "bg-cyan-500/20 text-cyan-300 ring-1 ring-cyan-400/30"
-                : "text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
+                ? "bg-white text-cyan-700 shadow-sm ring-1 ring-cyan-200"
+                : "text-slate-600 hover:bg-white/80 hover:text-slate-900 hover:shadow-sm"
             }`}
           >
             {label}
@@ -51,11 +51,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
       {/* Mobile: top bar + hamburger */}
-      <header className="flex shrink-0 items-center gap-3 border-b border-white/10 bg-black/20 px-4 py-3 md:hidden">
+      <header className="flex shrink-0 items-center gap-3 border-b border-slate-200/80 bg-white/95 px-4 py-3 shadow-sm backdrop-blur md:hidden">
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-zinc-400 hover:bg-white/10 hover:text-zinc-200"
+          className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
           aria-label="打开菜单"
           aria-expanded={drawerOpen}
         >
@@ -91,19 +91,19 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile: drawer */}
       <aside
-        className="fixed left-0 top-0 z-50 flex h-full w-[280px] flex-col gap-4 border-r border-white/10 bg-zinc-900/95 p-4 shadow-xl backdrop-blur transition-transform duration-200 ease-out md:hidden"
+        className="fixed left-0 top-0 z-50 flex h-full w-[280px] flex-col gap-4 border-r border-slate-200/80 bg-white p-4 shadow-xl transition-transform duration-200 ease-out md:hidden"
         style={{
           transform: drawerOpen ? "translateX(0)" : "translateX(-100%)",
         }}
         aria-modal={drawerOpen}
         aria-hidden={!drawerOpen}
       >
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
-          <span className="text-sm font-medium text-foreground">菜单</span>
+        <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
+          <span className="text-sm font-semibold text-slate-800">菜单</span>
           <button
             type="button"
             onClick={closeDrawer}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-zinc-400 hover:bg-white/10 hover:text-zinc-200"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
             aria-label="关闭菜单"
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,7 +116,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Desktop: always-visible sidebar */}
-      <aside className="hidden w-[300px] shrink-0 flex-col gap-4 border-r border-white/10 bg-black/20 p-3 md:flex">
+      <aside className="hidden w-[300px] shrink-0 flex-col gap-4 border-r border-slate-200/80 bg-slate-50/80 p-4 md:flex">
         <NavLinks pathname={pathname} />
         <MonthCalendar />
       </aside>

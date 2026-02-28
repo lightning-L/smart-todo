@@ -1,6 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { AutoArchiveOnLoad } from "@/components/AutoArchiveOnLoad";
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Todo · Calendar Agenda",
@@ -18,10 +25,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
-      <body className="antialiased">
+    <html lang="zh-CN" className={plusJakarta.variable}>
+      <body className="min-h-screen antialiased font-sans [font-family:var(--font-sans),system-ui,sans-serif]">
         <AutoArchiveOnLoad />
-        {children}
+        <div className="relative z-10">{children}</div>
       </body>
     </html>
   );

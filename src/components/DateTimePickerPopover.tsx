@@ -64,22 +64,22 @@ export function DateTimePickerPopover({
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content
-          className="z-50 w-64 rounded-lg border border-white/10 bg-zinc-900/95 p-3 shadow-lg backdrop-blur"
+          className="z-50 w-64 rounded-xl border border-slate-200/80 bg-white p-4 shadow-xl"
           sideOffset={4}
         >
-          <div className="mb-2 text-xs font-medium text-zinc-400">{label}</div>
+          <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">{label}</div>
           <input
             type="datetime-local"
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
-            className="mb-3 w-full rounded border border-white/10 bg-white/5 px-2 py-1.5 text-sm text-foreground"
+            className="mb-3 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
           />
           <div className="flex justify-end gap-2">
             {allowClear && (
               <button
                 type="button"
                 onClick={handleClear}
-                className="rounded px-2 py-1 text-xs text-zinc-400 hover:bg-white/10 hover:text-zinc-200"
+                className="rounded px-2 py-1 text-xs text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
               >
                 清除
               </button>
@@ -87,7 +87,7 @@ export function DateTimePickerPopover({
             <button
               type="button"
               onClick={handleSave}
-              className="rounded bg-cyan-500/20 px-2 py-1 text-xs text-cyan-300 hover:bg-cyan-500/30"
+              className="rounded bg-cyan-100 px-2 py-1 text-xs text-cyan-700 hover:bg-cyan-200"
             >
               确定
             </button>

@@ -24,7 +24,7 @@ export function CommandBarQuickAdd() {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="添加任务，回车创建"
-        className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-base text-foreground placeholder:text-zinc-500 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400/50"
+        className="w-full rounded-xl border border-slate-200/80 bg-white px-4 py-3.5 text-base text-slate-900 shadow-sm placeholder:text-slate-400 transition-shadow focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/25 focus:shadow-[0_0_0_3px_rgba(8,145,178,0.12)]"
         aria-label="快速添加任务"
       />
     </form>

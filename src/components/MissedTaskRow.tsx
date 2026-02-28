@@ -41,21 +41,21 @@ export function MissedTaskRow({ task }: MissedTaskRowProps) {
   }, [task.id, isCompleted]);
 
   return (
-    <div className="flex min-h-[44px] items-center gap-2 rounded-lg border border-white/5 bg-white/5 px-3 py-2">
+    <div className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200/80 bg-white px-3 py-2.5 shadow-sm transition-all duration-200 hover:shadow-md">
       <button
         type="button"
         onClick={handleComplete}
-        className="flex h-5 w-5 shrink-0 items-center justify-center rounded border border-white/20 bg-transparent"
+        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 border-slate-300 bg-white"
         aria-pressed={isCompleted}
       >
-        {isCompleted && <span className="text-cyan-400">✓</span>}
+        {isCompleted && <span className="text-cyan-600">✓</span>}
       </button>
-      <span className="w-14 shrink-0 text-xs tabular-nums text-zinc-500">
+      <span className="w-14 shrink-0 text-xs tabular-nums text-slate-500">
         {task.scheduledAt ? formatTime(task.scheduledAt) : "—"}
       </span>
       <Link
         href={`/task/${task.id}`}
-        className={`min-w-0 flex-1 truncate hover:underline ${isCompleted ? "text-zinc-500 line-through" : "text-foreground"}`}
+        className={`min-w-0 flex-1 truncate font-medium hover:underline ${isCompleted ? "text-slate-500 line-through" : "text-slate-800"}`}
       >
         {task.title || "（无标题）"}
       </Link>
@@ -63,7 +63,7 @@ export function MissedTaskRow({ task }: MissedTaskRowProps) {
         <button
           type="button"
           onClick={doToday}
-          className="rounded px-2 py-1 text-xs text-cyan-400 hover:bg-cyan-500/20"
+          className="rounded-lg px-2 py-1 text-xs font-medium text-cyan-600 transition-colors hover:bg-cyan-100"
         >
           今天做
         </button>
@@ -75,7 +75,7 @@ export function MissedTaskRow({ task }: MissedTaskRowProps) {
           trigger={
             <button
               type="button"
-              className="rounded px-2 py-1 text-xs text-zinc-400 hover:bg-white/10 hover:text-zinc-200"
+              className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
             >
               选日期…
             </button>
@@ -84,7 +84,7 @@ export function MissedTaskRow({ task }: MissedTaskRowProps) {
         <button
           type="button"
           onClick={unschedule}
-          className="rounded px-2 py-1 text-xs text-zinc-400 hover:bg-white/10 hover:text-zinc-200"
+          className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
         >
           取消安排
         </button>

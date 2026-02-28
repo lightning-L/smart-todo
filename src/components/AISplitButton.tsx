@@ -16,7 +16,7 @@ export function AISplitButton({ rootId, rootTitle, onInserted }: AISplitButtonPr
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded border border-cyan-500/30 bg-cyan-500/10 px-2 py-1 text-xs text-cyan-300 hover:bg-cyan-500/20"
+        className="rounded border border-cyan-500/40 bg-cyan-100 px-2 py-1 text-xs text-cyan-700 hover:bg-cyan-200"
       >
         AI 帮我拆解
       </button>

@@ -84,8 +84,8 @@ export default function TaskDetailPage() {
     return (
       <AppLayout>
         <div className="p-6">
-          <p className="text-zinc-500">任务不存在</p>
-          <Link href="/" className="text-cyan-400 hover:underline">返回</Link>
+          <p className="text-slate-500">任务不存在</p>
+          <Link href="/" className="text-cyan-600 font-medium hover:underline">返回</Link>
         </div>
       </AppLayout>
     );
@@ -98,60 +98,60 @@ export default function TaskDetailPage() {
   return (
     <AppLayout>
       <div className="flex flex-col gap-4 p-6">
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          <Link href={backHref} className="text-zinc-500 hover:text-cyan-400">
+        <div className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
+          <Link href={backHref} className="font-medium text-cyan-600 hover:underline">
             ← 返回
           </Link>
           {task.parentId && parentTask && (
             <>
-              <span className="text-zinc-600">·</span>
+              <span className="text-slate-400">·</span>
               <Link
                 href={`/task/${task.parentId}`}
-                className="text-zinc-400 hover:text-cyan-400"
+                className="hover:text-cyan-600 hover:underline"
               >
                 {parentTask.title || "父任务"}
               </Link>
-              <span className="text-zinc-600">›</span>
+              <span className="text-slate-400">›</span>
             </>
           )}
-          <span className="text-foreground">
+          <span className="font-semibold text-slate-800">
             {task.title || "（无标题）"}
           </span>
         </div>
 
-        <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-          <div className="mb-3 flex items-center gap-2">
+        <div className="rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
+          <div className="mb-4 flex items-center gap-2">
             <input
               type="text"
               value={editTitle || task.title}
               onChange={(e) => setEditTitle(e.target.value)}
               onBlur={handleSaveTitle}
               onKeyDown={handleTitleKeyDown}
-              className="min-w-0 flex-1 rounded border border-white/10 bg-transparent px-2 py-1 text-lg text-foreground"
+              className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-lg font-medium text-slate-800 shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
               placeholder="任务标题"
               title="回车保存"
             />
-            <span className="text-xs text-zinc-500">{task.type}</span>
+            <span className="text-xs font-medium uppercase tracking-wider text-slate-400">{task.type}</span>
             {task.type === "task" && !task.parentId && !isCompleted && (
               <span className="flex gap-1">
                 <button
                   type="button"
                   onClick={() => updateTask(task.id, { type: "project" })}
-                  className="rounded px-1.5 py-0.5 text-xs text-zinc-500 hover:bg-white/10"
+                  className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100"
                 >
                   设为项目
                 </button>
                 <button
                   type="button"
                   onClick={() => updateTask(task.id, { type: "habit_daily" })}
-                  className="rounded px-1.5 py-0.5 text-xs text-zinc-500 hover:bg-white/10"
+                  className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100"
                 >
                   设为每日习惯
                 </button>
                 <button
                   type="button"
                   onClick={() => updateTask(task.id, { type: "ongoing" })}
-                  className="rounded px-1.5 py-0.5 text-xs text-zinc-500 hover:bg-white/10"
+                  className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100"
                 >
                   设为进行中
                 </button>
@@ -159,7 +159,7 @@ export default function TaskDetailPage() {
             )}
           </div>
 
-          <div className="mb-3 flex flex-wrap items-center gap-2">
+          <div className="mb-4 flex flex-wrap items-center gap-2">
             <DateTimePickerPopover
               value={task.scheduledAt}
               onChange={(iso) => setScheduledAt(task.id, iso)}
@@ -168,7 +168,7 @@ export default function TaskDetailPage() {
               trigger={
                 <button
                   type="button"
-                  className="rounded border border-white/10 px-2 py-1 text-sm text-zinc-400 hover:bg-white/10"
+                  className="rounded-lg border border-slate-200 px-2.5 py-1.5 text-sm text-slate-600 shadow-sm transition-colors hover:bg-slate-50"
                 >
                   {task.scheduledAt
                     ? new Date(task.scheduledAt).toLocaleString("zh-CN")
@@ -184,7 +184,7 @@ export default function TaskDetailPage() {
               trigger={
                 <button
                   type="button"
-                  className="rounded border border-white/10 px-2 py-1 text-sm text-zinc-400 hover:bg-white/10"
+                  className="rounded-lg border border-slate-200 px-2.5 py-1.5 text-sm text-slate-600 shadow-sm transition-colors hover:bg-slate-50"
                 >
                   {task.deadlineAt
                     ? new Date(task.deadlineAt).toLocaleString("zh-CN")
@@ -196,7 +196,7 @@ export default function TaskDetailPage() {
               <button
                 type="button"
                 onClick={() => completeTask(task.id)}
-                className="rounded bg-cyan-500/20 px-2 py-1 text-sm text-cyan-300 hover:bg-cyan-500/30"
+                className="rounded-lg bg-cyan-100 px-3 py-1.5 text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-200"
               >
                 完成
               </button>
@@ -204,7 +204,7 @@ export default function TaskDetailPage() {
               <button
                 type="button"
                 onClick={() => undoCompleteTask(task.id)}
-                className="rounded px-2 py-1 text-sm text-zinc-400 hover:bg-white/10"
+                className="rounded-lg px-3 py-1.5 text-sm text-slate-500 transition-colors hover:bg-slate-100"
               >
                 撤销完成
               </button>
@@ -212,8 +212,8 @@ export default function TaskDetailPage() {
           </div>
 
           {(task.type === "habit_daily" || task.type === "ongoing") && (
-            <div className="mt-4 border-t border-white/10 pt-4">
-              <span className="mb-2 block text-xs font-medium uppercase text-zinc-500">
+            <div className="mt-5 border-t border-slate-200 pt-5">
+              <span className="section-label mb-2 block border-l-2 border-cyan-500 pl-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
                 每日记录
               </span>
               <DailyLogList taskId={task.id} />
@@ -221,16 +221,16 @@ export default function TaskDetailPage() {
           )}
 
           {(task.type === "project" || task.parentId) && (
-            <div className="mt-4 border-t border-white/10 pt-4">
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-xs font-medium uppercase text-zinc-500">子任务</span>
+            <div className="mt-5 border-t border-slate-200 pt-5">
+              <div className="mb-3 flex items-center justify-between">
+                <span className="section-label border-l-2 border-cyan-500 pl-3 text-xs font-semibold uppercase tracking-wider text-slate-500">子任务</span>
                 {task.type === "project" && !isCompleted && !showAddChildInput && (
                   <span className="flex gap-2">
                     <AISplitButton rootId={task.id} rootTitle={task.title} />
                     <button
                       type="button"
                       onClick={() => setShowAddChildInput(true)}
-                      className="text-xs text-cyan-400 hover:underline"
+                      className="text-xs font-medium text-cyan-600 hover:underline"
                     >
                       + 添加子任务
                     </button>
@@ -238,7 +238,7 @@ export default function TaskDetailPage() {
                 )}
               </div>
               {showAddChildInput && (
-                <div className="mb-2 flex flex-wrap items-center gap-2 rounded-lg border border-cyan-500/30 bg-cyan-500/5 p-2">
+                <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-cyan-200 bg-cyan-50/80 p-3 shadow-sm">
                   <input
                     ref={newChildInputRef}
                     type="text"
@@ -251,20 +251,20 @@ export default function TaskDetailPage() {
                       }
                       if (e.key === "Escape") handleCancelAddChild();
                     }}
-                    className="min-w-0 flex-1 rounded border border-white/10 bg-transparent px-2 py-1.5 text-sm text-foreground"
+                    className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
                     placeholder="子任务标题，回车添加"
                   />
                   <button
                     type="button"
                     onClick={handleConfirmAddChild}
-                    className="rounded bg-cyan-500/20 px-3 py-1.5 text-sm text-cyan-300 hover:bg-cyan-500/30"
+                    className="rounded-lg bg-cyan-100 px-3 py-1.5 text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-200"
                   >
                     添加
                   </button>
                   <button
                     type="button"
                     onClick={handleCancelAddChild}
-                    className="rounded px-3 py-1.5 text-sm text-zinc-400 hover:bg-white/10"
+                    className="rounded-lg px-3 py-1.5 text-sm text-slate-500 transition-colors hover:bg-slate-100"
                   >
                     取消
                   </button>

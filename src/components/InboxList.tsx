@@ -21,12 +21,12 @@ export function InboxList() {
   );
 
   if (tasks === undefined) {
-    return <div className="text-zinc-500">加载中…</div>;
+    return <div className="text-slate-500">加载中…</div>;
   }
 
   if (tasks.length === 0) {
     return (
-      <div className="py-8 text-center text-zinc-500">
+      <div className="py-8 text-center text-slate-500">
         收件箱为空。未安排的任务会出现在这里。
       </div>
     );

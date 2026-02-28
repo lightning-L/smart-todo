@@ -1,12 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0f;
-  --foreground: #e4e4e7;
-  --surface: rgba(255, 255, 255, 0.05);
-  --border: rgba(255, 255, 255, 0.08);
-  --accent: #22d3ee;
-  --accent-glow: rgba(34, 211, 238, 0.35);
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --surface: #ffffff;
+  --surface-hover: #f1f5f9;
+  --border: #e2e8f0;
+  --border-subtle: #f1f5f9;
+  --accent: #0891b2;
+  --accent-soft: #cffafe;
+  --accent-glow: rgba(8, 145, 178, 0.15);
+  --radius-card: 0.75rem;
+  --radius-input: 0.5rem;
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+  --shadow-card-hover: 0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-focus: 0 0 0 3px rgba(8, 145, 178, 0.2);
 }
 
 @theme inline {
@@ -17,6 +25,16 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
+  font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+}
+
+/* Subtle gradient overlay for depth (optional, very light) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(8, 145, 178, 0.06), transparent);
+  pointer-events: none;
+  z-index: 0;
 }

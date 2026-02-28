@@ -12,9 +12,9 @@ import Link from "next/link";
 
 function SectionHeader({ title, count }: { title: string; count: number }) {
   return (
-    <h2 className="mb-2 text-xs font-medium uppercase tracking-wider text-zinc-500">
+    <h2 className="section-label mb-2.5 border-l-2 border-cyan-500 pl-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
       {title}
-      {count > 0 && <span className="ml-1 font-normal text-zinc-600">({count})</span>}
+      {count > 0 && <span className="ml-1 font-normal text-slate-600">({count})</span>}
     </h2>
   );
 }
@@ -37,7 +37,7 @@ function CollapsibleSection({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="mb-2 flex w-full items-center gap-2 text-left text-xs font-medium uppercase tracking-wider text-zinc-500 hover:text-zinc-400"
+        className="mb-2 flex w-full items-center gap-2 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 transition-colors hover:text-slate-700"
       >
         <span>{open ? "▼" : "▶"}</span>
         {title} ({count})
@@ -55,7 +55,7 @@ export function AllSections() {
   }, [tasks]);
 
   if (tasks === undefined || !sections) {
-    return <div className="text-zinc-500">加载中…</div>;
+    return <div className="text-slate-500">加载中…</div>;
   }
 
   const progressMap = useMemo(() => {
@@ -141,8 +141,8 @@ export function AllSections() {
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-zinc-500">
-            无未安排任务。<Link href="/inbox" className="text-cyan-400 hover:underline">收件箱</Link>
+          <p className="text-sm text-slate-500">
+            无未安排任务。<Link href="/inbox" className="text-cyan-600 font-medium hover:underline">收件箱</Link>
           </p>
         )}
       </section>

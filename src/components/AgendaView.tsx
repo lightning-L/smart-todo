@@ -55,18 +55,18 @@ export function AgendaView() {
   }, [tasks]);
 
   if (tasks === undefined) {
-    return <div className="text-zinc-500">加载中…</div>;
+    return <div className="text-slate-500">加载中…</div>;
   }
 
   return (
     <div>
-      <h1 className="mb-4 text-lg font-medium text-foreground">
+      <h1 className="mb-6 text-xl font-semibold tracking-tight text-slate-800">
         {format(selectedDate, "M月d日 EEEE", { locale: zhCN })}
       </h1>
       <AgendaSection title="已安排" tasks={scheduled} showTime progressMap={progressMap} />
       {daily.length > 0 && (
         <section className="mb-6">
-          <h2 className="mb-2 text-xs font-medium uppercase tracking-wider text-zinc-500">
+          <h2 className="section-label mb-2.5 border-l-2 border-cyan-500 pl-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
             每日
           </h2>
           <ul className="flex flex-col gap-1">
@@ -80,7 +80,7 @@ export function AgendaView() {
       )}
       <AgendaSection title="已完成" tasks={done} showTime progressMap={progressMap} />
       {scheduled.length === 0 && daily.length === 0 && done.length === 0 && (
-        <p className="text-sm text-zinc-500">当天暂无任务</p>
+        <p className="text-sm text-slate-500">当天暂无任务</p>
       )}
     </div>
   );

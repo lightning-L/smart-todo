@@ -8,11 +8,11 @@ export function SimpleTaskList() {
   const tasks = useLiveQuery(() => db.tasks.orderBy("createdAt").reverse().toArray(), []);
 
   if (tasks === undefined) {
-    return <div className="text-zinc-500">加载中…</div>;
+    return <div className="text-slate-500">加载中…</div>;
   }
 
   if (tasks.length === 0) {
-    return <div className="py-8 text-center text-zinc-500">暂无任务，在上方输入框添加</div>;
+    return <div className="py-8 text-center text-slate-500">暂无任务，在上方输入框添加</div>;
   }
 
   return (

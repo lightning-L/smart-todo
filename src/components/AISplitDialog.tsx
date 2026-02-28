@@ -91,24 +91,24 @@ export function AISplitDialog({
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-lg border border-white/10 bg-zinc-900 p-4 shadow-xl">
-          <Dialog.Title className="mb-2 text-lg font-medium text-foreground">
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-2xl">
+          <Dialog.Title className="mb-3 text-lg font-semibold tracking-tight text-slate-800">
             AI 拆解：{rootTitle}
           </Dialog.Title>
           {loading ? (
-            <p className="text-zinc-500">生成中…</p>
+            <p className="text-slate-500">生成中…</p>
           ) : (
             <>
               <div className="max-h-64 overflow-y-auto space-y-3 mb-3">
                 {groups.map((g, gi) => (
-                  <div key={gi} className="rounded border border-white/10 bg-white/5 p-2">
-                    <div className="mb-1 text-xs font-medium text-zinc-400">{g.name}</div>
+                  <div key={gi} className="rounded-xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm">
+                    <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">{g.name}</div>
                     {g.items.map((item, ii) => (
                       <div key={ii} className="flex gap-2 py-1">
                         <input
                           value={item.title}
                           onChange={(e) => updateItem(gi, ii, "title", e.target.value)}
-                          className="min-w-0 flex-1 rounded border border-white/10 bg-transparent px-2 py-1 text-sm"
+                          className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
                           placeholder="子任务标题"
                         />
                       </div>
@@ -123,7 +123,7 @@ export function AISplitDialog({
                 <Dialog.Close asChild>
                   <button
                     type="button"
-                    className="rounded px-3 py-1.5 text-sm text-zinc-400 hover:bg-white/10"
+                    className="rounded px-3 py-1.5 text-sm text-zinc-500 hover:bg-zinc-100"
                   >
                     取消
                   </button>
@@ -131,14 +131,14 @@ export function AISplitDialog({
                 <button
                   type="button"
                   onClick={() => replace()}
-                  className="rounded bg-red-500/20 px-3 py-1.5 text-sm text-red-300 hover:bg-red-500/30"
+                  className="rounded bg-red-100 px-3 py-1.5 text-sm text-red-700 hover:bg-red-200"
                 >
                   替换现有子任务
                 </button>
                 <button
                   type="button"
                   onClick={() => insert()}
-                  className="rounded bg-cyan-500/20 px-3 py-1.5 text-sm text-cyan-300 hover:bg-cyan-500/30"
+                  className="rounded bg-cyan-100 px-3 py-1.5 text-sm text-cyan-700 hover:bg-cyan-200"
                 >
                   插入
                 </button>

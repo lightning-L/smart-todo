@@ -49,7 +49,7 @@ export function ProjectTree({ rootId, depth = 0 }: ProjectTreeProps) {
             />
             <Link
               href={`/task/${task.id}`}
-              className="shrink-0 text-xs text-zinc-500 hover:text-cyan-400"
+              className="shrink-0 text-xs font-medium text-slate-500 transition-colors hover:text-cyan-600"
             >
               详情
             </Link>
