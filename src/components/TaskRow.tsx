@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import Link from "next/link";
 import type { Task } from "@/lib/types";
-import { completeTask } from "@/lib/task-crud";
+import { completeTask, undoCompleteTask } from "@/lib/task-crud";
 import { TaskTypeIcon } from "./TaskTypeIcon";
 
 type FromPage = "all" | "calendar" | "inbox";
@@ -37,8 +37,8 @@ export function TaskRow({ task, showTime = false, progress, from, onToggle, chec
     if (useCustomToggle) {
       await onToggle(task);
     } else {
-      if (isCompleted) return;
-      await completeTask(task.id);
+      if (isCompleted) await undoCompleteTask(task.id);
+      else await completeTask(task.id);
     }
   }, [task, useCustomToggle, onToggle, isCompleted]);
 
@@ -53,7 +53,7 @@ export function TaskRow({ task, showTime = false, progress, from, onToggle, chec
         type="button"
         onClick={handleToggle}
         className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 border-slate-300 bg-white transition-colors hover:border-cyan-500 hover:bg-cyan-50"
-        aria-label={showChecked ? "已完成" : "完成"}
+        aria-label={showChecked ? "撤销完成" : "完成"}
         aria-pressed={showChecked}
         disabled={useCustomToggle && showChecked}
       >

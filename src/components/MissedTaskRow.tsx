@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import Link from "next/link";
 import { startOfDay, format, parseISO } from "date-fns";
 import type { Task } from "@/lib/types";
-import { setScheduledAt, completeTask } from "@/lib/task-crud";
+import { setScheduledAt, completeTask, undoCompleteTask } from "@/lib/task-crud";
 import { DateTimePickerPopover, formatDateTimeDisplay } from "./DateTimePickerPopover";
 import { TaskTypeIcon } from "./TaskTypeIcon";
 
@@ -39,7 +39,8 @@ export function MissedTaskRow({ task, from }: MissedTaskRowProps) {
   );
 
   const handleComplete = useCallback(async () => {
-    if (!isCompleted) await completeTask(task.id);
+    if (isCompleted) await undoCompleteTask(task.id);
+    else await completeTask(task.id);
   }, [task.id, isCompleted]);
 
   return (
@@ -47,7 +48,8 @@ export function MissedTaskRow({ task, from }: MissedTaskRowProps) {
       <button
         type="button"
         onClick={handleComplete}
-        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 border-slate-300 bg-white"
+        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 border-slate-300 bg-white transition-colors hover:border-cyan-500 hover:bg-cyan-50"
+        aria-label={isCompleted ? "撤销完成" : "完成"}
         aria-pressed={isCompleted}
       >
         {isCompleted && <span className="text-cyan-600">✓</span>}

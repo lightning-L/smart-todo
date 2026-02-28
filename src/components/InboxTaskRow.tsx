@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import Link from "next/link";
 import type { Task } from "@/lib/types";
-import { completeTask, setScheduledAt, setDeadlineAt } from "@/lib/task-crud";
+import { completeTask, undoCompleteTask, setScheduledAt, setDeadlineAt } from "@/lib/task-crud";
 import { DateTimePickerPopover, formatDateTimeDisplay } from "./DateTimePickerPopover";
 import { TaskTypeIcon } from "./TaskTypeIcon";
 
@@ -18,8 +18,8 @@ export function InboxTaskRow({ task, from }: InboxTaskRowProps) {
   const isCompleted = task.status === "completed";
 
   const handleComplete = useCallback(async () => {
-    if (isCompleted) return;
-    await completeTask(task.id);
+    if (isCompleted) await undoCompleteTask(task.id);
+    else await completeTask(task.id);
   }, [task.id, isCompleted]);
 
   const handleScheduleChange = useCallback(
@@ -37,7 +37,7 @@ export function InboxTaskRow({ task, from }: InboxTaskRowProps) {
         type="button"
         onClick={handleComplete}
         className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 border-slate-300 bg-white transition-colors hover:border-cyan-500 hover:bg-cyan-50"
-        aria-label={isCompleted ? "已完成" : "完成"}
+        aria-label={isCompleted ? "撤销完成" : "完成"}
         aria-pressed={isCompleted}
       >
         {isCompleted && <span className="text-cyan-600">✓</span>}
