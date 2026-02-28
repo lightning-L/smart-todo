@@ -9,6 +9,7 @@ import {
   format,
   isSameMonth,
   isSameDay,
+  isToday,
   addMonths,
   subMonths,
 } from "date-fns";
@@ -66,6 +67,7 @@ export function MonthCalendar() {
         {rows.map((d) => {
           const inMonth = isSameMonth(d, selectedDate);
           const selected = isSameDay(d, selectedDate);
+          const isTodayDate = isToday(d);
           return (
             <button
               key={d.toISOString()}
@@ -77,9 +79,11 @@ export function MonthCalendar() {
               className={`rounded-lg py-2 text-sm font-medium transition-all duration-150 ${
                 selected
                   ? "bg-cyan-500 text-white shadow-md shadow-cyan-500/25"
-                  : inMonth
-                    ? "text-slate-700 hover:bg-slate-100"
-                    : "text-slate-400 hover:bg-slate-50"
+                  : isTodayDate
+                    ? "bg-cyan-50 text-cyan-700 ring-2 ring-cyan-400/60 hover:bg-cyan-100"
+                    : inMonth
+                      ? "text-slate-700 hover:bg-slate-100"
+                      : "text-slate-400 hover:bg-slate-50"
               }`}
             >
               {format(d, "d")}
