@@ -5,7 +5,7 @@ import Link from "next/link";
 import { startOfDay, format, parseISO } from "date-fns";
 import type { Task } from "@/lib/types";
 import { setScheduledAt, completeTask } from "@/lib/task-crud";
-import { DateTimePickerPopover } from "./DateTimePickerPopover";
+import { DateTimePickerPopover, formatDateTimeDisplay } from "./DateTimePickerPopover";
 
 interface MissedTaskRowProps {
   task: Task;
@@ -77,7 +77,7 @@ export function MissedTaskRow({ task }: MissedTaskRowProps) {
               type="button"
               className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
             >
-              选日期…
+              {task.scheduledAt ? formatDateTimeDisplay(task.scheduledAt) : "选日期…"}
             </button>
           }
         />

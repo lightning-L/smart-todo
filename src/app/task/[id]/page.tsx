@@ -14,7 +14,7 @@ import {
   setDeadlineAt,
 } from "@/lib/task-crud";
 import { AppLayout } from "@/components/AppLayout";
-import { DateTimePickerPopover } from "@/components/DateTimePickerPopover";
+import { DateTimePickerPopover, formatDateTimeDisplay } from "@/components/DateTimePickerPopover";
 import { ProjectTree } from "@/components/ProjectTree";
 import { DailyLogList } from "@/components/DailyLogList";
 import { AISplitButton } from "@/components/AISplitButton";
@@ -171,7 +171,7 @@ export default function TaskDetailPage() {
                   className="rounded-lg border border-slate-200 px-2.5 py-1.5 text-sm text-slate-600 shadow-sm transition-colors hover:bg-slate-50"
                 >
                   {task.scheduledAt
-                    ? new Date(task.scheduledAt).toLocaleString("zh-CN")
+                    ? formatDateTimeDisplay(task.scheduledAt)
                     : "安排…"}
                 </button>
               }
@@ -187,7 +187,7 @@ export default function TaskDetailPage() {
                   className="rounded-lg border border-slate-200 px-2.5 py-1.5 text-sm text-slate-600 shadow-sm transition-colors hover:bg-slate-50"
                 >
                   {task.deadlineAt
-                    ? new Date(task.deadlineAt).toLocaleString("zh-CN")
+                    ? formatDateTimeDisplay(task.deadlineAt)
                     : "截止…"}
                 </button>
               }

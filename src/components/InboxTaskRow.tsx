@@ -4,24 +4,10 @@ import { useCallback } from "react";
 import Link from "next/link";
 import type { Task } from "@/lib/types";
 import { completeTask, setScheduledAt, setDeadlineAt } from "@/lib/task-crud";
-import { DateTimePickerPopover } from "./DateTimePickerPopover";
+import { DateTimePickerPopover, formatDateTimeDisplay } from "./DateTimePickerPopover";
 
 interface InboxTaskRowProps {
   task: Task;
-}
-
-function formatTime(iso: string | undefined): string {
-  if (!iso) return "";
-  try {
-    return new Date(iso).toLocaleDateString("zh-CN", {
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return "";
-  }
 }
 
 export function InboxTaskRow({ task }: InboxTaskRowProps) {
@@ -70,7 +56,7 @@ export function InboxTaskRow({ task }: InboxTaskRowProps) {
                 type="button"
                 className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
               >
-                {task.scheduledAt ? formatTime(task.scheduledAt) : "安排…"}
+                {task.scheduledAt ? formatDateTimeDisplay(task.scheduledAt) : "安排…"}
               </button>
             }
           />
@@ -84,7 +70,7 @@ export function InboxTaskRow({ task }: InboxTaskRowProps) {
                 type="button"
                 className="rounded-lg px-2 py-1 text-xs text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
               >
-                {task.deadlineAt ? formatTime(task.deadlineAt) : "截止…"}
+                {task.deadlineAt ? formatDateTimeDisplay(task.deadlineAt) : "截止…"}
               </button>
             }
           />
