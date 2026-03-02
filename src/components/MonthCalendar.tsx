@@ -23,6 +23,11 @@ export function MonthCalendar() {
   const router = useRouter();
   const pathname = usePathname();
   const { selectedDate, setSelectedDate } = useUiStore();
+  const now = new Date();
+  console.log(typeof window === "undefined" ? "[MonthCalendar SERVER]" : "[MonthCalendar CLIENT]", {
+    now: now.toISOString(),
+    selectedDate: selectedDate?.toISOString(),
+  });
   const monthStart = startOfMonth(selectedDate);
   const monthEnd = endOfMonth(selectedDate);
   const calStart = startOfWeek(monthStart, { weekStartsOn: 0 });
