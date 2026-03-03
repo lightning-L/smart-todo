@@ -2,8 +2,13 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { MonthCalendar } from "./MonthCalendar";
+
+const MonthCalendar = dynamic(
+  () => import("./MonthCalendar").then((m) => m.MonthCalendar),
+  { ssr: false }
+);
 
 const navItems = [
   { href: "/", label: "日历" },
