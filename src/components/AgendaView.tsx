@@ -2,7 +2,7 @@
 
 import { useLiveQuery } from "dexie-react-hooks";
 import { useMemo } from "react";
-import { format } from "date-fns";
+import { format, addDays, startOfDay, isToday } from "date-fns";
 import { zhCN } from "date-fns/locale";
 import { db } from "@/lib/db";
 import { useUiStore } from "@/store/ui-store";
@@ -12,7 +12,7 @@ import { AgendaSection } from "./AgendaSection";
 import { DailyTaskRow } from "./DailyTaskRow";
 
 export function AgendaView() {
-  const { selectedDate } = useUiStore();
+  const { selectedDate, setSelectedDate } = useUiStore();
   const tasks = useLiveQuery(() => db.tasks.toArray(), []);
 
   const { scheduled, daily, done } = useMemo(() => {
@@ -58,11 +58,47 @@ export function AgendaView() {
     return <div className="text-slate-500">加载中…</div>;
   }
 
+  const isSelectedToday = isToday(selectedDate);
+
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold tracking-tight text-slate-800">
-        {format(selectedDate, "M月d日 EEEE", { locale: zhCN })}
-      </h1>
+      <div className="mb-6 flex items-center justify-between gap-4">
+        <button
+          type="button"
+          onClick={() => setSelectedDate(startOfDay(new Date()))}
+          disabled={isSelectedToday}
+          className={`shrink-0 rounded-xl px-3 py-2 text-sm font-medium transition-all ${
+            isSelectedToday
+              ? "cursor-default text-slate-400"
+              : "text-cyan-600 hover:bg-cyan-50 hover:text-cyan-700"
+          }`}
+          aria-label="今天"
+        >
+          今天
+        </button>
+        <div className="flex min-w-0 flex-1 items-center justify-center gap-1">
+          <button
+            type="button"
+            onClick={() => setSelectedDate(addDays(selectedDate, -1))}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-lg font-bold text-slate-700 transition-colors hover:bg-slate-300 hover:text-slate-900"
+            aria-label="前一天"
+          >
+            ‹
+          </button>
+          <h1 className="min-w-0 truncate text-center text-xl font-semibold tracking-tight text-slate-800">
+            {format(selectedDate, "M月d日 EEEE", { locale: zhCN })}
+          </h1>
+          <button
+            type="button"
+            onClick={() => setSelectedDate(addDays(selectedDate, 1))}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-lg font-bold text-slate-700 transition-colors hover:bg-slate-300 hover:text-slate-900"
+            aria-label="后一天"
+          >
+            ›
+          </button>
+        </div>
+        <div className="w-[4.5rem] shrink-0" aria-hidden />
+      </div>
       <AgendaSection title="已安排" tasks={scheduled} showTime progressMap={progressMap} from="calendar" />
       {daily.length > 0 && (
         <section className="mb-6">
