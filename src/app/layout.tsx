@@ -11,8 +11,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Todo · Calendar Agenda",
-  description: "以日历日程为核心的个人 Todo",
+  title: "Smart Todo · Calendar Agenda",
+  description: "以日历日程为核心的个人 Smart Todo",
 };
 
 export const viewport: Viewport = {
