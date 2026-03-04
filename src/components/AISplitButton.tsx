@@ -6,10 +6,12 @@ import { AISplitDialog } from "./AISplitDialog";
 interface AISplitButtonProps {
   rootId: string;
   rootTitle: string;
+  rootDescription?: string;
+  deadlineAt?: string;
   onInserted?: () => void;
 }
 
-export function AISplitButton({ rootId, rootTitle, onInserted }: AISplitButtonProps) {
+export function AISplitButton({ rootId, rootTitle, rootDescription, deadlineAt, onInserted }: AISplitButtonProps) {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -25,6 +27,8 @@ export function AISplitButton({ rootId, rootTitle, onInserted }: AISplitButtonPr
         onOpenChange={setOpen}
         rootId={rootId}
         rootTitle={rootTitle}
+        rootDescription={rootDescription}
+        deadlineAt={deadlineAt}
         onInserted={onInserted ?? (() => {})}
       />
     </>

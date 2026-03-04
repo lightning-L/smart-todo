@@ -247,7 +247,7 @@ export default function TaskDetailPage() {
                 {!isCompleted && !showAddChildInput && (task.type === "project" || task.parentId) && (
                   <span className="flex gap-2">
                     {task.type === "project" && (
-                      <AISplitButton rootId={task.id} rootTitle={task.title} />
+                      <AISplitButton rootId={task.id} rootTitle={task.title} deadlineAt={task.deadlineAt} />
                     )}
                     <button
                       type="button"

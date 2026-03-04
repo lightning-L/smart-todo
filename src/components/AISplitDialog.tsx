@@ -2,16 +2,17 @@
 
 import { useState, useCallback, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import type { AISplitGroup } from "@/lib/ai-split-mock";
-import { getMockSplit } from "@/lib/ai-split-mock";
-import { createTask } from "@/lib/task-crud";
-import { db } from "@/lib/db";
+import type { AISplitItemWithLevel } from "@/lib/ai-split-mock";
+import { createTask, deleteTask } from "@/lib/task-crud";
+import { getAllDescendants } from "@/lib/task-tree";
 
 interface AISplitDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   rootId: string;
   rootTitle: string;
+  rootDescription?: string;
+  deadlineAt?: string;
   onInserted: () => void;
 }
 
@@ -20,19 +21,58 @@ export function AISplitDialog({
   onOpenChange,
   rootId,
   rootTitle,
+  rootDescription,
+  deadlineAt,
   onInserted,
 }: AISplitDialogProps) {
-  const [groups, setGroups] = useState<AISplitGroup[]>([]);
+  const [items, setItems] = useState<AISplitItemWithLevel[]>([]);
   const [disclaimer, setDisclaimer] = useState("");
-  const loading = false;
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (open) {
-      const res = getMockSplit(rootTitle);
-      setGroups(JSON.parse(JSON.stringify(res.groups)));
-      setDisclaimer(res.disclaimer);
-    }
-  }, [open, rootTitle]);
+    if (!open) return;
+
+    let cancelled = false;
+    setLoading(true);
+    setItems([]);
+    setDisclaimer("");
+
+    (async () => {
+      try {
+        const res = await fetch("/api/ai-split", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            rootTitle,
+            rootDescription: rootDescription || undefined,
+            deadlineAt: deadlineAt || undefined,
+          }),
+        });
+        if (cancelled) return;
+        if (res.ok) {
+          const data = await res.json();
+          if (data.items && Array.isArray(data.items)) {
+            setItems(JSON.parse(JSON.stringify(data.items)));
+            setDisclaimer(typeof data.disclaimer === "string" ? data.disclaimer : "");
+          } else {
+            setDisclaimer("生成失败，请重试。");
+          }
+        } else {
+          setDisclaimer("生成失败，请重试。");
+        }
+      } catch {
+        if (!cancelled) {
+          setDisclaimer("生成失败，请重试。");
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [open, rootTitle, rootDescription, deadlineAt]);
 
   const handleOpenChange = useCallback(
     (isOpen: boolean) => {
@@ -41,51 +81,44 @@ export function AISplitDialog({
     [onOpenChange]
   );
 
-  const updateItem = useCallback(
-    (gi: number, ii: number, field: "title" | "note", value: string) => {
-      setGroups((prev) => {
-        const next = JSON.parse(JSON.stringify(prev));
-        if (!next[gi]?.items?.[ii]) return prev;
-        next[gi].items[ii][field] = value;
-        return next;
-      });
+  const updateItem = useCallback((index: number, field: "title" | "note", value: string) => {
+    setItems((prev) => {
+      const next = JSON.parse(JSON.stringify(prev));
+      if (!next[index]) return prev;
+      next[index][field] = value;
+      return next;
+    });
+  }, []);
+
+  const applyItems = useCallback(
+    async (replaceExisting: boolean) => {
+      if (replaceExisting) {
+        const descendants = await getAllDescendants(rootId);
+        for (let i = descendants.length - 1; i >= 0; i--) {
+          await deleteTask(descendants[i].id);
+        }
+      }
+      const parentStack: string[] = [];
+      for (const item of items) {
+        if (!item.title.trim()) continue;
+        const level = Math.max(0, Math.min(item.level, parentStack.length));
+        const parentId = level === 0 ? rootId : (parentStack[level - 1] ?? rootId);
+        const task = await createTask({
+          title: item.title.trim(),
+          parentId,
+          type: "task",
+        });
+        parentStack.length = level;
+        parentStack.push(task.id);
+      }
+      onInserted();
+      onOpenChange(false);
     },
-    []
+    [items, rootId, onInserted, onOpenChange]
   );
 
-  const insert = useCallback(async () => {
-    for (const g of groups) {
-      for (const item of g.items) {
-        if (!item.title.trim()) continue;
-        await createTask({
-          title: item.title.trim(),
-          parentId: rootId,
-          type: "task",
-        });
-      }
-    }
-    onInserted();
-    onOpenChange(false);
-  }, [groups, rootId, onInserted, onOpenChange]);
-
-  const replace = useCallback(async () => {
-    const children = await db.tasks.where("parentId").equals(rootId).toArray();
-    for (const c of children) {
-      await db.tasks.delete(c.id);
-    }
-    for (const g of groups) {
-      for (const item of g.items) {
-        if (!item.title.trim()) continue;
-        await createTask({
-          title: item.title.trim(),
-          parentId: rootId,
-          type: "task",
-        });
-      }
-    }
-    onInserted();
-    onOpenChange(false);
-  }, [groups, rootId, onInserted, onOpenChange]);
+  const insert = useCallback(() => applyItems(false), [applyItems]);
+  const replace = useCallback(() => applyItems(true), [applyItems]);
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
@@ -99,20 +132,19 @@ export function AISplitDialog({
             <p className="text-slate-500">生成中…</p>
           ) : (
             <>
-              <div className="max-h-64 overflow-y-auto space-y-3 mb-3">
-                {groups.map((g, gi) => (
-                  <div key={gi} className="rounded-xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm">
-                    <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">{g.name}</div>
-                    {g.items.map((item, ii) => (
-                      <div key={ii} className="flex gap-2 py-1">
-                        <input
-                          value={item.title}
-                          onChange={(e) => updateItem(gi, ii, "title", e.target.value)}
-                          className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
-                          placeholder="子任务标题"
-                        />
-                      </div>
-                    ))}
+              <div className="max-h-64 overflow-y-auto space-y-1 mb-3">
+                {items.map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex gap-2 py-1"
+                    style={{ paddingLeft: item.level * 20 }}
+                  >
+                    <input
+                      value={item.title}
+                      onChange={(e) => updateItem(i, "title", e.target.value)}
+                      className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+                      placeholder="子任务标题"
+                    />
                   </div>
                 ))}
               </div>
