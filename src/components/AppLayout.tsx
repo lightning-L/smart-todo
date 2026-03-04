@@ -12,7 +12,6 @@ const MonthCalendar = dynamic(
 );
 
 const navItems = [
-  { href: "/", label: "日历" },
   { href: "/all", label: "全部" },
   { href: "/inbox", label: "收件箱" },
 ] as const;
