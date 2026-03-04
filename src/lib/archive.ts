@@ -1,5 +1,6 @@
 import { subDays } from "date-fns";
 import { db } from "./db";
+import { pushTaskById } from "./sync";
 
 /** Run once on app load: mark tasks completed > 30 days ago as archived. */
 export async function runAutoArchive(): Promise<number> {
@@ -11,6 +12,7 @@ export async function runAutoArchive(): Promise<number> {
     .toArray();
   for (const t of toArchive) {
     await db.tasks.update(t.id, { status: "archived", updatedAt: new Date().toISOString() });
+    await pushTaskById(t.id);
   }
   return toArchive.length;
 }

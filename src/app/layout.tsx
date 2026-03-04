@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { AutoArchiveOnLoad } from "@/components/AutoArchiveOnLoad";
+import { Providers } from "@/components/Providers";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -27,8 +28,10 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className={plusJakarta.variable}>
       <body className="min-h-screen antialiased font-sans [font-family:var(--font-sans),system-ui,sans-serif]">
-        <AutoArchiveOnLoad />
-        <div className="relative z-10">{children}</div>
+        <Providers>
+          <AutoArchiveOnLoad />
+          <div className="relative z-10">{children}</div>
+        </Providers>
       </body>
     </html>
   );

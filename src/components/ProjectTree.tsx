@@ -75,7 +75,7 @@ export function ProjectTree({ rootId, depth = 0, from }: ProjectTreeProps) {
                   ? progressMap?.get(task.id)
                   : undefined
               }
-              from={from ?? undefined}
+              from={from === "all" || from === "calendar" || from === "inbox" ? from : undefined}
             />
             {task.status !== "completed" && (
               <button

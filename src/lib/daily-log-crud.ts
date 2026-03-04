@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import { db } from "./db";
 import type { DailyLog } from "./types";
 import { format } from "date-fns";
+import { pushDailyLog } from "./sync";
 
 const now = () => new Date().toISOString();
 
@@ -11,15 +12,18 @@ export async function createDailyLog(
   did: boolean,
   note?: string
 ): Promise<DailyLog> {
+  const ts = now();
   const log: DailyLog = {
     id: nanoid(),
     taskId,
     date,
     did,
     note,
-    createdAt: now(),
+    createdAt: ts,
+    updatedAt: ts,
   };
   await db.dailyLogs.add(log);
+  await pushDailyLog(log);
   return log;
 }
 

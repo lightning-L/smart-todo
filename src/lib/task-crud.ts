@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { db } from "./db";
 import type { Task, TaskType } from "./types";
+import { pushTask, pushTaskById, deleteTaskOnServer } from "./sync";
 
 const now = () => new Date().toISOString();
 
@@ -19,6 +20,7 @@ export async function createTask(
     updatedAt: now(),
   };
   await db.tasks.add(task);
+  await pushTask(task);
   return task;
 }
 
@@ -39,6 +41,7 @@ export async function updateTask(
   updates: Partial<Pick<Task, "title" | "type" | "scheduledAt" | "deadlineAt" | "status" | "completedAt">>
 ): Promise<void> {
   await db.tasks.update(id, { ...updates, updatedAt: now() });
+  await pushTaskById(id);
 }
 
 async function tryCompleteRoot(rootId: string): Promise<void> {
@@ -55,6 +58,7 @@ async function tryCompleteRoot(rootId: string): Promise<void> {
     scheduledAt: undefined,
     updatedAt: completedAt,
   });
+  await pushTaskById(rootId);
   if (root.parentId) await tryCompleteRoot(root.parentId);
 }
 
@@ -68,6 +72,7 @@ export async function completeTask(id: string): Promise<void> {
     scheduledAt: undefined,
     updatedAt: completedAt,
   });
+  await pushTaskById(id);
   const { getRoot } = await import("./task-tree");
   const root = await getRoot(task);
   if (root.id !== task.id) await tryCompleteRoot(root.id);
@@ -79,16 +84,20 @@ export async function undoCompleteTask(id: string): Promise<void> {
     completedAt: undefined,
     updatedAt: now(),
   });
+  await pushTaskById(id);
 }
 
 export async function deleteTask(id: string): Promise<void> {
   await db.tasks.delete(id);
+  await deleteTaskOnServer(id);
 }
 
 export async function setScheduledAt(id: string, scheduledAt: string | null): Promise<void> {
   await db.tasks.update(id, { scheduledAt: scheduledAt ?? undefined, updatedAt: now() });
+  await pushTaskById(id);
 }
 
 export async function setDeadlineAt(id: string, deadlineAt: string | null): Promise<void> {
   await db.tasks.update(id, { deadlineAt: deadlineAt ?? undefined, updatedAt: now() });
+  await pushTaskById(id);
 }

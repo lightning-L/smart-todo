@@ -24,4 +24,5 @@ export interface DailyLog {
   did: boolean;
   note?: string;
   createdAt: string;
+  updatedAt?: string;
 }
