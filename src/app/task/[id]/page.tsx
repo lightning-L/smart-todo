@@ -244,9 +244,11 @@ export default function TaskDetailPage() {
             <div className="mt-6 border-t border-slate-200 pt-5 md:mt-5">
               <div className="mb-3 flex items-center justify-between">
                 <span className="section-label border-l-2 border-cyan-500 pl-3 text-xs font-semibold uppercase tracking-wider text-slate-500">子任务</span>
-                {task.type === "project" && !isCompleted && !showAddChildInput && (
+                {!isCompleted && !showAddChildInput && (task.type === "project" || task.parentId) && (
                   <span className="flex gap-2">
-                    <AISplitButton rootId={task.id} rootTitle={task.title} />
+                    {task.type === "project" && (
+                      <AISplitButton rootId={task.id} rootTitle={task.title} />
+                    )}
                     <button
                       type="button"
                       onClick={() => setShowAddChildInput(true)}
